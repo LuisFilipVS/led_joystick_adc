@@ -23,13 +23,14 @@
 #define JOYSTICK_PB 22 // GPIO para botão do Joystick
 
 //Definição do Botão para ligar ou desligar o RGB
-#define Botao_A 5 // GPIO para botão A
+#define botaoA 5 // GPIO para botão A
 
 //Instanciação dos métodos
 void ligarLedAzul(float dutyCicle);
 void ligarLedVerde(float dutyCicle);
 
 static volatile uint32_t last_time = 0;
+static volatile bool atualizarLed = true; //Variavel que determinar se o led RGB deve ser atualizado via PWM
 
 //Configuração para inciação da Placa em modo Bootsel ao selecionar o botão B
 #include "pico/bootrom.h"
@@ -46,11 +47,18 @@ void gpio_irq_handler(uint gpio, uint32_t events){
         if (current_time - last_time > 200000) // 200 ms de debouncing
         {
             last_time = current_time; // Atualiza o tempo do último evento
-            printf("Botao clicado \n");
             gpio_put(LED_VERMELHO, !gpio_get(LED_VERMELHO));
         }
+    } else if(gpio == botaoA){
+        if (current_time - last_time > 200000) // 200 ms de debouncing
+        {
+            last_time = current_time; // Atualiza o tempo do último evento
+            atualizarLed = !atualizarLed;
+        }
+        
     }
 }
+
 
 uint pwm_init_gpio(uint gpio, uint wrap) {
     gpio_set_function(gpio, GPIO_FUNC_PWM);
@@ -80,10 +88,11 @@ int get_posicaoX(int xValue){
         
     }
 
+    if(atualizarLed){
+        ligarLedAzul(dutyCicle);
+    }
 
-    ligarLedAzul(dutyCicle);
     return value;
-
 }
 
 int get_posicaoY(int yValue){
@@ -100,11 +109,12 @@ int get_posicaoY(int yValue){
         intensidade = 2100 - yValue;
         dutyCicle = (float) intensidade/2100; 
         value = 30 + (dutyCicle * 30);
-        
     }
     
-    
-    ligarLedVerde(dutyCicle);
+    if(atualizarLed){
+        ligarLedVerde(dutyCicle);
+    }
+
     return value;
 }
 
@@ -149,7 +159,14 @@ int main()
     gpio_init(botaoB);
     gpio_set_dir(botaoB, GPIO_IN);
     gpio_pull_up(botaoB);
+
+    gpio_init(botaoA);
+    gpio_set_dir(botaoA, GPIO_IN);
+    gpio_pull_up(botaoA);
+
+
     gpio_set_irq_enabled_with_callback(botaoB, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler);
+    gpio_set_irq_enabled_with_callback(botaoA, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler);
 
 
     //Configuração dos LEDS para trabalharem com ADC
