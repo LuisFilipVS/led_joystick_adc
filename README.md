@@ -84,3 +84,9 @@ O código utiliza as seguintes bibliotecas:
 
 🚀 Projeto desenvolvido para controle interativo de LEDs e display OLED utilizando o Raspberry Pi Pico.
 
+
+## 🎥 Vídeo Demonstrativo
+
+🔗 [Clique aqui para assistir](https://drive.google.com/file/d/1dvplmqpv3u8oHRhB_Ceebqie-QApQYYW/view?usp=sharing)
+
+
