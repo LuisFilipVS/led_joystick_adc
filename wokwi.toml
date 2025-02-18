@@ -1,0 +1,4 @@
+[wokwi]
+version = 1
+firmware = 'build/led_joystick_adc.uf2'
+elf = 'build/led_joystick_adc.elf'
