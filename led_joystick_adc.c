@@ -35,6 +35,7 @@ static volatile uint32_t last_time = 0;
 #include "pico/bootrom.h"
 #define botaoB 6
 void gpio_irq_handler(uint gpio, uint32_t events){
+    
     // Obtém o tempo atual em microssegundos
     uint32_t current_time = to_us_since_boot(get_absolute_time());
     // Verifica se passou tempo suficiente desde o último evento
@@ -65,27 +66,22 @@ uint pwm_init_gpio(uint gpio, uint wrap) {
 int get_posicaoX(int xValue){
     int value, intensidade;
     float dutyCicle = 0.0;
-    //Max Value = 64
-    //Limiar = 4095
-    //x 24 1891 4088
-    //Y 24 1992 4089
-
+    
     if (xValue > 2000){
         intensidade = (2088 - (4088 - xValue));
         dutyCicle = (float) intensidade/2088;
         value = (dutyCicle * 60) + 60;
-        //printf("Para Direita: intensidade: '%d' | dutyCicle: '%f' | value: '%d' \n", intensidade, dutyCicle, value);
+        
     
     } else if (xValue < 1900){
         intensidade = 1900 - xValue;
         dutyCicle = (float) intensidade/1900; 
         value = 60 - (dutyCicle * 60);
-        //printf("Para Esquerda: intensidade: '%d' | dutyCicle: '%f' | value: '%d' \n", intensidade, dutyCicle, value);
+        
     }
 
-    //dutyCicle = (float) intensidade/2188; 
+
     ligarLedAzul(dutyCicle);
-    //printf("Valor: '%d' | DutyCicle: '%f' \n", value, dutyCicle);
     return value;
 
 }
@@ -93,28 +89,22 @@ int get_posicaoX(int xValue){
 int get_posicaoY(int yValue){
     int value, intensidade;
     float dutyCicle = 0.0;
-    //Max Value = 64
-    //Limiar = 4095
-    //x 24 1891 4088
-    //Y 24 1992 4089
-
+    
     if (yValue > 2100){
         intensidade = (1988 - (4088 - yValue));
         dutyCicle = (float) intensidade/1988;
         value = 30 - (dutyCicle * 30);
-        printf("Para Cima: intensidade: '%d' | dutyCicle: '%f' | value: '%d' \n", intensidade, dutyCicle, value);
+        
     
     } else if (yValue < 2100){
         intensidade = 2100 - yValue;
         dutyCicle = (float) intensidade/2100; 
         value = 30 + (dutyCicle * 30);
-        printf("Para baixo: intensidade: '%d' | dutyCicle: '%f' | value: '%d' \n", intensidade, dutyCicle, value);
+        
     }
     
-    //dutyCicle = (float) intensidade/2000;
+    
     ligarLedVerde(dutyCicle);
-    printf("Valor: '%d' | DutyCicle: '%f' | Medida: '%d' \n", value, dutyCicle, yValue);
-
     return value;
 }
 
