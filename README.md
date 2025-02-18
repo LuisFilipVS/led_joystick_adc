@@ -80,12 +80,6 @@ O código utiliza as seguintes bibliotecas:
 - O botão B pode ser usado para reiniciar o Raspberry Pi Pico em modo BOOTSEL.
 - Há um sistema de debounce implementado para evitar leituras indesejadas dos botões.
 
-## 🔮 Melhorias Futuras
-
-- Adicionar suporte a um LED RGB único em vez de LEDs separados.
-- Implementar um menu interativo no display OLED.
-- Melhorar a suavização dos movimentos do joystick para maior precisão.
-
 ---
 
 🚀 Projeto desenvolvido para controle interativo de LEDs e display OLED utilizando o Raspberry Pi Pico.
